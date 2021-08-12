@@ -11,12 +11,12 @@ class TransformerEmbedding(nn.Module):
     """
     Token Embedding + Positional Encoding
     """
-    def __init__(self, vocab_size, d_model, max_seq_len, dropout_rate, device):
+    def __init__(self, vocab_size, d_model, max_seq_len, drop_rate, device):
         super(TransformerEmbedding, self).__init__()
 
         self.token_emb = nn.Embedding(num_embeddings=vocab_size, embedding_dim=d_model, padding_idx=1, device = device)
         self.pos_enc = PositionalEncoding(d_model=d_model, max_seq_len=max_seq_len, device=device)
-        self.dropout = nn.Dropout(p=dropout_rate)
+        self.dropout = nn.Dropout(p=drop_rate)
 
     def forward(self, x):
         token_emb = self.token_emb(x)

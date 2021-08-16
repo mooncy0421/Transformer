@@ -27,13 +27,13 @@ class Decoder(nn.Module):
 
     def forward(self, enc_in, dec_in, pad_mask, dec_mask):
         x_ = dec_in
-        x = self.self_attn(Q=dec_in, K=dec_in, V=dec_in, mask=pad_mask)
+        x = self.self_attn(Q=dec_in, K=dec_in, V=dec_in, mask=dec_mask)
         x = self.lnorm1(x_ + x)
         x = self.drop1(x)
 
         if enc_in is not None:
             x_ = x
-            x = self.encdec_attn(Q=enc_in, K=x, V=x, mask=dec_mask)
+            x = self.encdec_attn(Q=enc_in, K=x, V=x, mask=enc_mask)
             x = self.lnorm2(x_ + x)
             x = self.drop2(x)
 

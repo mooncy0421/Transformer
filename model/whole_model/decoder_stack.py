@@ -26,11 +26,11 @@ class DecoderStack(nn.Module):
                                                for _ in range(num_layers)])
         self.lin = nn.Linear(d_model, dec_voc_size)
 
-    def forward(self, enc_in, dec_in, pad_mask, dec_mask):
+    def forward(self, enc_res, dec_in, pad_mask, dec_mask):
         x = self.emb(dec_in)
 
         for dec in self.deocders:
-            x = dec(enc_in, x, pad_mask, dec_mask)
+            x = dec(enc_res, x, pad_mask, dec_mask)
 
         x = self.lin(x)
         

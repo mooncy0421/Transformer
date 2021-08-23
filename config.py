@@ -24,3 +24,6 @@ eps = 1e-9
 warmup_steps = 4000
 init_lr = 1e-5
 weight_decay = 5e-4
+# Learning rate scheduler hyperparameter
+lr_factor = 0.9
+lr_patience = 10

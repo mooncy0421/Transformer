@@ -8,7 +8,7 @@ from torch.optim import Adam
 
 from config import *
 from model.whole_model.transformer import Transformer
-from util.dataloader import DataLoader
+from util.dataloader import TranslationDataloader
 
 import torchtext
 
@@ -18,13 +18,13 @@ def init_weights(model):
         nn.init.kaiming_uniform(model.weight.data)
 
 # Multi30k dataset
-loader = DataLoader(SRC_LANGUAGE='en',
+loader = TranslationDataloader(SRC_LANGUAGE='en',
                     TGT_LANGUAGE='de')
 
 src_lang = 'en'
 tgt_lang = 'de'
 
-train_data, valide_data, test_data = loader.load_dataset()
+train_data, valid_data, test_data = loader.load_dataset()
 loader.build_vocab(dataset=train_data, min_freq=2)
 
 # Transformer architecture
@@ -56,3 +56,19 @@ scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer = optimizer,
 
 # Loss function (Cross Entropy)
 criterion = nn.CrossEntropyLoss(ignore_index=loader.PAD_IDX)
+
+
+def train(model, iterator, optimizer, criterion):
+    model.train()
+    eopch_loss = 0
+
+    for i, batch in enumerate(iterator):
+        src = batch.src
+        tgt = batch.tgt
+
+        optimizer.zero_grad()
+        output = model(src, tgt[:,:-1])
+        output_reshape = output.contiguous().view(-1, output.shape[-1])
+        tgt = tgt[:, 1:].contiguous().view(-1)
+
+    
